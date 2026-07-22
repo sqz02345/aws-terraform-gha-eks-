@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "eks_cluster_trust" {
   }
 }
 resource "aws_iam_role" "eks_cluster" {
-  name   = "${var.cluster_name}-cluster-role"
+  name               = "${var.cluster_name}-cluster-role"
   assume_role_policy = data.aws_iam_policy_document.eks_cluster_trust.json
 }
 
@@ -63,10 +63,10 @@ resource "aws_iam_role_policy_attachment" "eks_node_ecr_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 resource "aws_eks_node_group" "main" {
-  cluster_name    = aws_eks_cluster.main.name
-  node_role_arn   = aws_iam_role.eks_node.arn
-  subnet_ids = aws_subnet.private[*].id
-  instance_types  = var.node_instance_types
+  cluster_name   = aws_eks_cluster.main.name
+  node_role_arn  = aws_iam_role.eks_node.arn
+  subnet_ids     = aws_subnet.private[*].id
+  instance_types = var.node_instance_types
 
   scaling_config {
     desired_size = 2
