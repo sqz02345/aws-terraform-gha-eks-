@@ -18,12 +18,12 @@ variable "state_bucket_prefix" {
 variable "github_org" {
   type        = string
   description = "Name of the pwner"
-  default = "sqz02345"
+  default     = "sqz02345"
 }
 
 variable "github_repo" {
   type        = string
   description = "GitHub repository name that's allowed to assume the bootstrap IAM role"
-  default     = "aws-terraform-gha-eks"
+  default     = "aws-terraform-gha-eks-"
 }
 

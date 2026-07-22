@@ -95,8 +95,8 @@ data "aws_iam_policy_document" "github_trust" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:${var.github_org}/${var.github_repo}:ref:refs/heads/main",
-        "repo:${var.github_org}/${var.github_repo}:pull_request",
+        "repo:${var.github_org}@*/${var.github_repo}@*:ref:refs/heads/main",
+        "repo:${var.github_org}@*/${var.github_repo}@*:pull_request",
       ]
     }
   }
@@ -119,6 +119,31 @@ data "aws_iam_policy_document" "github_actions_permissions" {
       "elasticloadbalancing:*",
     ]
     resources = ["*"]
+  }
+
+  statement {
+    sid    = "TerraformStateAccess"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:ListBucket",
+    ]
+    resources = [
+      aws_s3_bucket.bucket.arn,
+      "${aws_s3_bucket.bucket.arn}/*",
+    ]
+  }
+
+  statement {
+    sid    = "TerraformLockAccess"
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem",
+    ]
+    resources = [aws_dynamodb_table.state_lock_table.arn]
   }
 }
 
